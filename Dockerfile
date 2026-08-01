@@ -1,16 +1,15 @@
 FROM python:3.9
 
-# Installation de FFmpeg pour la vidéo
+# Installation de FFmpeg
 RUN apt-get update && apt-get install -y ffmpeg
 
-# Définir le dossier de travail
 WORKDIR /app
 
-# Copier les fichiers du projet
+# Copie des fichiers
 COPY . /app
 
-# Installer les dépendances Python (on les définira juste après)
-RUN pip install -r requirements.txt
+# Installation des dépendances
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Lancer le serveur (on va créer le fichier app.py ensuite)
+# Lancement de l'application
 CMD ["python", "app.py"]
