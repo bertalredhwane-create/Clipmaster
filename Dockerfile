@@ -1,12 +1,11 @@
-FROM python:3.9-slim
+FROM python:3.9
 
-RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y ffmpeg
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY . /app
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
-
-CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]
+CMD ["python", "app.py"]
