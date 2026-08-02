@@ -2,6 +2,7 @@ import os
 from flask import Flask, jsonify
 
 app = Flask(__name__)
+app.json.ensure_ascii = False
 
 @app.route('/')
 def home():
