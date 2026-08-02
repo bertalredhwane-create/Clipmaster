@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clipmaster</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #111; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #222; padding: 24px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; }
+    input { width: 100%; padding: 12px; margin: 12px 0; border-radius: 6px; border: 1px solid #444; background: #333; color: #fff; box-sizing: border-box; }
+    button { width: 100%; padding: 12px; border-radius: 6px; border: none; background: #ff4757; color: #fff; font-weight: bold; cursor: pointer; }
+    button:disabled { background: #666; }
+    video { width: 100%; margin-top: 16px; border-radius: 8px; display: none; }
+    #status { margin-top: 12px; font-size: 0.9em; color: #aaa; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Clipmaster</h1>
+    <p>Transforme ta vidéo en format 9:16</p>
+    <input type="text" id="url" placeholder="Lien YouTube..." />
+    <button id="btn" onclick="generateClip()">Générer le clip</button>
+    <div id="status"></div>
+    <video id="player" controls></video>
+  </div>
+
+  <script>
+    async function generateClip() {
+      const url = document.getElementById('url').value;
+      const btn = document.getElementById('btn');
+      const status = document.getElementById('status');
+      const player = document.getElementById('player');
+
+      if (!url) return alert('Renseigne une URL YouTube');
+
+      btn.disabled = true;
+      status.innerText = 'Traitement en cours (1 à 2 min)...';
+      player.style.display = 'none';
+
+      try {
+        const res = await fetch('https://clipmaster-sd76.onrender.com/api/process', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url })
+        });
+
+        if (!res.ok) throw new Error('Erreur lors du traitement');
+
+        const blob = await res.blob();
+        player.src = URL.createObjectURL(blob);
+        player.style.display = 'block';
+        status.innerText = 'Terminé !';
+      } catch (err) {
+        status.innerText = 'Une erreur est survenue.';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
