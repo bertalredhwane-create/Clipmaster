@@ -2,3 +2,4 @@ flask
 yt-dlp
 moviepy
 openai-whisper
+flask-cors
