@@ -1,18 +1,17 @@
 FROM python:3.9-slim
 
-# Installation de ffmpeg et des dépendances système nécessaires
+# Installation de ffmpeg et des dépendances système
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copie et installation des dépendances Python
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copie de TOUS les fichiers du projet dans le conteneur
+COPY . /app/
 
-# Copie du reste des fichiers de l'application
-COPY . .
+# Installation des dépendances
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 10000
 
